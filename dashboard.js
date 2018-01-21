@@ -21,8 +21,10 @@ function createGrid() {
 
 
 function assing_resize_binding() {
-    $('#grid li .resize').click(function(e) {
+  $('#grid li .resize').click(function(e) {
     e.preventDefault();
+    $(e.currentTarget).closest('div').children().removeClass('selected');
+    $(e.currentTarget).addClass('selected');
     var itemElement = $(e.currentTarget).closest('li'),
         itemWidth = $(e.currentTarget).data('w'),
         itemHeight = $(e.currentTarget).data('h');
@@ -33,7 +35,6 @@ function assing_resize_binding() {
       h: itemHeight
     });
   });
-
   $('#grid li .delete').click(function(e) {
     e.preventDefault();
     if ($(e.currentTarget).data('del') == true) {
@@ -49,7 +50,7 @@ function box_html(box_content) {
               '<a href="#" class="resize mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-w="1" data-h="1">1x1</a>' +
               '<a href="#" class="resize mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-w="2" data-h="1">2x1</a>' +
               '<a href="#" class="resize mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-w="1" data-h="2">1x2</a>' +
-              '<a href="#" class="resize mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-w="2" data-h="2">2x2</a>' +
+              '<a href="#" class="selected resize mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-w="2" data-h="2">2x2</a>' +
               '<a href="#" class="delete mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--colored" data-del="true">del</a>' +
             '</div>' +
             box_content +
