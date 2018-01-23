@@ -97,9 +97,24 @@ $(window).resize(function() {
   $('#grid').gridList('reflow');
 });
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
 
 $(function() {
-  SmartCamGrid.buildElements($('#grid'), testGrid);
+  if ($.urlParam('grid') === null) {
+    SmartCamGrid.buildElements($('#grid'), testGrid);
+  } else {
+    testGridParams = JSON.parse(decodeURIComponent($.urlParam("grid")));
+    nboxes = Object.keys(testGridParams).length;
+    SmartCamGrid.buildElements($('#grid'), Object.keys(testGridParams).map(function (key) { return testGridParams[key]; }));
+  }
 
   $('#grid').gridList({
     lanes: SmartCamGrid.currentSize,
@@ -115,5 +130,16 @@ $(function() {
     e.preventDefault();
     SmartCamGrid.appendElement($('#grid'), {w: 2, h: 2, x: 0, y: 0});
     $('#grid').gridList('resize', SmartCamGrid.currentSize); // refresh the grid to reallocate spaces
+  });
+
+  $('#save').click(function(e) {
+    e.preventDefault();
+    var grid_items = $.extend({}, $("#grid").data('_gridList').gridList.items);
+    for (i = 0; i < Object.keys(grid_items).length; i++) { 
+      delete grid_items[i].$element;
+      delete grid_items[i].id;
+      delete grid_items[i].autoSize;
+    }
+    window.location = window.location.href.split(/[?#]/)[0] + '?grid=' + encodeURIComponent(JSON.stringify(grid_items));
   });
 });
